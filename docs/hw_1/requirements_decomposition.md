@@ -17,7 +17,7 @@
 3. В таск-трекере должны быть только задачи. Проектов, скоупов и спринтов нет, потому что они не умещаются в голове попуга.
     - Actor: Account
     - Command: TaskTracker: Get tasks
-    - Data: ?
+    - Data: Account public id
     - Event: ?
 
 4. Новые таски может создавать кто угодно (администратор, начальник, разработчик, менеджер и любая другая роль). У задачи должны быть описание, статус (выполнена или нет) и рандомно выбранный попуг (кроме менеджера и администратора), на которого заассайнена задача.
@@ -62,7 +62,7 @@
    - видеть в отдельном месте список заассайненных на него задач.
      - Actor: Account
      - Command: TaskTracker: Get tasks
-     - Data: ?
+     - Data: Account public id
      - Event: ?
    - отметить задачу выполненной.
       - Actor: Account
@@ -90,15 +90,15 @@
          - Event: Accounting:GetBalance
    - У админов и бухгалтеров должен быть доступ к общей статистике по деньгами заработанным (количество заработанных топ-менеджментом за сегодня денег + статистика по дням).
        - количество заработанных топ-менеджментом за сегодня денег
-           - Actor: "Accounting:GetOperations" Event
-           - Command: Accounting: sum operations
-           - Data: Accounting:OperationsBy
-           - Event: Accounting:GetEarnedToday
+           - Actor: Account:Admin / Account:Accountant
+           - Command: Accounting: Get Stats Today
+           - Data: date
+           - Event: Accounting:GetStatsToday
        - статистика по дням
            - Actor: Account:Admin / Account:Accountant
-           - Command: Accounting: Get operations
-           - Data: Date
-           - Event: Accounting:GetOperations
+           - Command: Accounting: Get Stats
+           - Data: date interval
+           - Event: Accounting:GetStats
 2. Авторизация в дешборде аккаунтинга должна выполняться через общий сервис аутентификации UberPopug Inc.
     - Actor: Account
     - Command: Login to Uber Popug
@@ -106,15 +106,15 @@
     - Event: Account:LoginedToUberPopug
 3. У каждого из сотрудников, при регистрации в системе, должен быть свой счёт, который показывает,
    - сколько за сегодня он получил денег
-     - Actor: "Accounting:GetOperationsById" event
-     - Command: Accounting: sum operations by id
-     - Data: Accounting:OperationsById
-     - Event: Accounting:GetEarnedTodayById
+     - Actor: Account
+     - Command: Accounting: Get Stats Today
+     - Data: date, account public id
+     - Event: Accounting:GetStatsToday
    - У счёта должен быть лог того, за что были списаны или начислены деньги, с подробным описанием каждой из операций.
-       - Actor: Account:Popug
-       - Command: Accounting: Get operations by id
-       - Data: Account:Popug public id, Date
-       - Event: Accounting:GetOperationsById
+       - Actor: Account
+       - Command: Accounting: Get log
+       - Data: date, Account public id
+       - Event: Accounting:GetLog
 4. Расценки:
    - цены на задачу определяется единоразово, в момент появления в системе (можно с минимальной задержкой)
    - цены рассчитываются без привязки к сотруднику
@@ -133,12 +133,12 @@
      - списываются сразу после ассайна на сотрудника,
          - Actor: "Task:Assigned" event
          - Command: TaskTracker: Write off money
-         - Data: Task public id
+         - Data: Task public id, Sum
          - Event: TaskTracker: WriteOffMoney
      - а начисляются после выполнения задачи.
          - Actor: "Task:Resolved" event
          - Command: TaskTracker: Charge price
-         - Data: Task public id
+         - Data: Task public id, Sum
          - Event: Accounting: ResolvePriceCharged
    - отрицательный баланс переносится на следующий день. Единственный способ его погасить - закрыть достаточное количество задач в течение дня.
      - Actor: 00:00 trigger
@@ -147,10 +147,10 @@
      - Event: Accounting: DebtSaved
 5. Дашборд должен выводить количество заработанных топ-менеджментом за сегодня денег.
    - a) т.е. сумма заасайненых задач минус сумма всех закрытых задач за день: sum(assigned task fee) - sum(completed task amount)
-     - Actor: "Accounting:GetOperations" Event
-     - Command: Accounting: sum operations
-     - Data: Accounting:OperationsBy
-     - Event: Accounting:GetEarnedToday
+     - Actor: Account:Admin / Account:Accountant
+     - Command: Accounting: Get Stats Today
+     - Data: date
+     - Event: Accounting:GetStatsToday
    - б) цена асайна или цена выплаты указывается всегда с положительным знаком
 6. В конце дня необходимо:
    - a) считать сколько денег сотрудник получил за рабочий день
@@ -182,14 +182,14 @@
 
 1. Аналитика — это отдельный дашборд, доступный только админам.
     - Actor: "Account:LoginedToUberPopug" event
-    - Command: Accounting: Login
+    - Command: Analytic: Login
     - Data: Account(Admin) public id
     - Event: Account:LoginedToAnalytic
 2. Нужно указывать, 
    - сколько заработал топ-менеджмент за сегодня
      - Actor: Account:Admin
      - Command: Analytic: get earned today
-     - Data: ?
+     - Data: date
      - Event: Analytic:GetEarnedToday
    - и сколько попугов ушло в минус.
      - Actor: Account:Admin
