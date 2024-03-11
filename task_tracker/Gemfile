@@ -19,6 +19,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 gem "bootsnap", require: false
 
+# auth
+gem 'devise'
+gem 'omniauth-keycloak'
+
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
 end
