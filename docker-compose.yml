@@ -21,31 +21,31 @@ services:
       - ./db/storage:/var/lib/postgresql/data
     ports:
       - "5433:5432"
-#  # AuthZ & AuthN
-#  keycloak:
-#    image: quay.io/phasetwo/phasetwo-keycloak:23.0.7
-#    depends_on:
-#      - postgres
-#    networks:
-#      - ates
-#    environment:
-#      - KC_DB=postgres
-#      - KC_DB_URL_HOST=postgres
-#      - KC_DB_URL_DATABASE=ates_keycloak
-#      - KC_DB_USERNAME=postgres
-#      - KC_DB_PASSWORD=postgres
-#      - KC_HEALTH_ENABLED=true
-#      - KEYCLOAK_ADMIN=admin
-#      - KEYCLOAK_ADMIN_PASSWORD=admin
-#    healthcheck:
-#      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#    ports:
-#      - "7000:8080"
-#    command:
-#      - start-dev
+  # AuthZ & AuthN
+  keycloak:
+    image: quay.io/phasetwo/phasetwo-keycloak:23.0.7
+    depends_on:
+      - postgres
+    networks:
+      - ates
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=postgres
+      - KC_DB_URL_DATABASE=ates_keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    healthcheck:
+      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "7000:8080"
+    command:
+      - start-dev
 
 #  # Kafka cluster
 #  kafka-ui:
