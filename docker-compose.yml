@@ -46,6 +46,7 @@ services:
       - "7000:8080"
     command:
       - start-dev
+      - --http-relative-path=/auth
 
 #  # Kafka cluster
 #  kafka-ui:
