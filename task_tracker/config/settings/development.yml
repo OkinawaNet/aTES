@@ -1,0 +1,7 @@
+keycloak:
+  url: 'http://localhost:7000'
+  realm: 'master'
+  client_id: 'task_tracker'
+  credentials:
+    username: 'admin'
+    password: 'admin'
