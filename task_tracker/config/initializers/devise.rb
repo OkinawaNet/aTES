@@ -273,6 +273,15 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
+  config.omniauth :keycloak_openid,
+    ENV.fetch('OMNIAUTH_CLIENT', 'task_tracker'),
+    ENV.fetch('OMNIAUTH_SECRET', ''),
+    client_options: {
+      site: ENV.fetch('OMNIAUTH_SITE', 'http://localhost:7000'),
+      realm: ENV.fetch('OMNIAUTH_REALM', 'master')
+    },
+    strategy_class: OmniAuth::Strategies::KeycloakOpenId
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
