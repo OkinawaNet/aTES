@@ -22,6 +22,7 @@ gem "bootsnap", require: false
 # auth
 gem 'devise'
 gem 'omniauth-keycloak'
+gem 'omniauth-rails_csrf_protection'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
