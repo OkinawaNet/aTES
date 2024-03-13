@@ -274,10 +274,10 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
   config.omniauth :keycloak_openid,
-    ENV.fetch('OMNIAUTH_CLIENT', 'account'),
+    ENV.fetch('OMNIAUTH_CLIENT', 'task_tracker'),
     ENV.fetch('OMNIAUTH_SECRET', ''),
     client_options: {
-      site: ENV.fetch('OMNIAUTH_SITE', 'http://localhost:7000'),
+      site: Settings.keycloak.url,
       realm: ENV.fetch('OMNIAUTH_REALM', 'master')
     },
     strategy_class: OmniAuth::Strategies::KeycloakOpenId
