@@ -1,5 +1,7 @@
 module ApiClient
   class KeycloakClient
+    delegate :logger, to: Rails
+
     TIMEOUT = Settings.faraday.default_timeout
 
     def initialize(
@@ -15,7 +17,7 @@ module ApiClient
     end
 
     def get_webhooks
-      get_webhooks.select { |webhook| webhook['url'] == Settings.root_url }
+      get_all_webhooks.filter { |webhook| webhook['url'] == Settings.root_url }
     end
 
     def create_webhook(event_types = ['*'], enabled = true)
@@ -24,10 +26,14 @@ module ApiClient
         "url": Settings.root_url,
         "eventTypes": event_types
       })
+
+      logger.info("Webhook for events: #{event_types} created")
     end
 
     def delete_webhook(id)
       delete("webhooks/#{id}")
+
+      logger.info("Webhook id: #{id} deleted")
     end
 
     private

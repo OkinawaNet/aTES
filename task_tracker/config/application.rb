@@ -23,5 +23,12 @@ module TaskTracker
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.after_initialize do
+      # Subscribe for keycloak events
+      kc_client = ApiClient::KeycloakClient.new
+      kc_client.get_webhooks.each { |webhook| kc_client.delete_webhook(webhook['id']) }
+      kc_client.create_webhook
+    end
   end
 end
