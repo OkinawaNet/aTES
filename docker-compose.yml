@@ -19,11 +19,11 @@ services:
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./db/storage:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
+
   # AuthZ & AuthN
   keycloak:
     image: quay.io/phasetwo/phasetwo-keycloak:23.0.7
+    container_name: keycloak
     depends_on:
       - postgres
     networks:
@@ -47,6 +47,25 @@ services:
     command:
       - start-dev
       - --http-relative-path=/auth
+  task_tracker:
+    build: ./task_tracker
+    container_name: task_tracker
+    networks:
+      - ates
+    volumes:
+      - ./task_tracker:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 9000 -b '0.0.0.0'"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_task_tracker_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
 
 #  # Kafka cluster
 #  kafka-ui:

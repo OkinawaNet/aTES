@@ -36,11 +36,11 @@ module ApiClient
       logger.info("Webhook id: #{id} deleted")
     end
 
-    private
-
     def get_all_webhooks
       JSON.parse(get('/webhooks').body)
     end
+
+    private
 
     def get(path)
       token = get_admin_token

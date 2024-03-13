@@ -1,9 +1,9 @@
 keycloak:
-  url: 'http://localhost:7000'
+  url: 'http://keycloak:8080'
   realm: 'master'
   client_id: 'task_tracker'
   credentials:
     username: 'admin'
     password: 'admin'
 
-root_url: "http://localhost:9000"
+root_url: "http://task_tracker:9000"

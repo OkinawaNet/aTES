@@ -8,8 +8,8 @@ development:
   database: ates_task_tracker_development
   username: postgres
   password: postgres
-  host: localhost
-  port: 5433
+  host: postgres
+  port: 5432
 
 test:
   <<: *default
