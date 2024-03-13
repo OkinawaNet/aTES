@@ -23,7 +23,7 @@ module ApiClient
     def create_webhook(event_types = ['*'], enabled = true)
       post('/webhooks', {
         "enabled": enabled,
-        "url": Settings.root_url,
+        "url": "#{Settings.root_url}/callbacks/keycloak_events",
         "eventTypes": event_types
       })
 
