@@ -5,3 +5,5 @@ keycloak:
   credentials:
     username: 'admin'
     password: 'admin'
+
+root_url: "http://localhost:8000"
