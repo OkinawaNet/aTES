@@ -47,9 +47,9 @@ services:
     command:
       - start-dev
       - --http-relative-path=/auth
-  task_tracker:
+  task-tracker:
     build: ./task_tracker
-    container_name: task_tracker
+    container_name: task-tracker
     networks:
       - ates
     volumes:
@@ -116,3 +116,4 @@ services:
 
 networks:
   ates:
+

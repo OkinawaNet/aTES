@@ -5,7 +5,7 @@ module ApiClient
     TIMEOUT = Settings.faraday.default_timeout
 
     def initialize(
-      url: Settings.keycloak.url,
+      url: Settings.keycloak.docker_url,
       realm: Settings.keycloak.realm,
       admin_credentials: Settings.keycloak.credentials,
       client_id: Settings.keycloak.client_id
@@ -17,13 +17,13 @@ module ApiClient
     end
 
     def get_webhooks
-      get_all_webhooks.filter { |webhook| webhook['url'] == Settings.root_url }
+      get_all_webhooks.filter { |webhook| webhook['url'] == Settings.task_tracker_docker_url }
     end
 
     def create_webhook(event_types = ['*'], enabled = true)
       post('/webhooks', {
         "enabled": enabled,
-        "url": "#{Settings.root_url}/callbacks/keycloak_events",
+        "url": "#{Settings.task_tracker_docker_url}/callbacks/keycloak_events",
         "eventTypes": event_types
       })
 
@@ -31,7 +31,7 @@ module ApiClient
     end
 
     def delete_webhook(id)
-      delete("webhooks/#{id}")
+      delete("/webhooks/#{id}")
 
       logger.info("Webhook id: #{id} deleted")
     end
@@ -85,7 +85,7 @@ module ApiClient
       parameters = prepare_body(type, body)
 
       response = connection.public_send(action) do |req|
-        req.url "/auth/realms/#{@realm}/#{path}"
+        req.url "/auth/realms/#{@realm}#{path}"
         req.headers['Authorization'] = token if token
         req.headers['Content-Type'] = type
         req.headers['Accept'] = 'application/json'

@@ -26,6 +26,8 @@ gem 'omniauth-rails_csrf_protection'
 
 # http
 gem 'faraday'
+gem 'httplog'
+
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]

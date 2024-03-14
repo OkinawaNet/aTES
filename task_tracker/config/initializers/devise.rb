@@ -277,7 +277,7 @@ Devise.setup do |config|
     ENV.fetch('OMNIAUTH_CLIENT', 'task_tracker'),
     ENV.fetch('OMNIAUTH_SECRET', ''),
     client_options: {
-      site: Settings.keycloak.url,
+      site: Settings.keycloak.docker_url,
       realm: ENV.fetch('OMNIAUTH_REALM', 'master')
     },
     strategy_class: OmniAuth::Strategies::KeycloakOpenId

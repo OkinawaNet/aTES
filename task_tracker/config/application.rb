@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require 'httplog'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -24,9 +25,12 @@ module TaskTracker
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    config.hosts << /.*/
+
     if defined?(Rails::Server)
       config.after_initialize do
         # Subscribe for keycloak events
+        Rails.logger.info('Subscribe for keycloak events')
         kc_client = ApiClient::KeycloakClient.new
         kc_client.get_webhooks.each { |webhook| kc_client.delete_webhook(webhook['id']) }
         kc_client.create_webhook
