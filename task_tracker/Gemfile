@@ -23,6 +23,7 @@ gem "bootsnap", require: false
 gem 'devise'
 gem 'omniauth-keycloak'
 gem 'omniauth-rails_csrf_protection'
+gem 'rolify'
 
 # http
 gem 'faraday'
