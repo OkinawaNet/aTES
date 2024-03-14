@@ -26,6 +26,8 @@ class CallbacksController < ApplicationController
       on_role_created
     when 'admin.REALM_ROLE_MAPPING-DELETE'
       on_role_deleted
+    else
+      logger.warn('Unknown event type')
     end
   end
 
