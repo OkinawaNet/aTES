@@ -1,0 +1,11 @@
+keycloak:
+  docker_url: 'http://keycloak:8080'
+  local_url: 'http://localhost:7000'
+  realm: 'master'
+  client_id: 'task_tracker'
+  credentials:
+    username: 'admin'
+    password: 'admin'
+
+task_tracker_local_url: "http://localhost:9000"
+task_tracker_docker_url: "http://task-tracker:9000"
