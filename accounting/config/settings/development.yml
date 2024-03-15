@@ -7,5 +7,5 @@ keycloak:
     username: 'admin'
     password: 'admin'
 
-accounting_local_url: "http://localhost:9000"
-accounting_docker_url: "http://task-tracker:9000"
+accounting_local_url: "http://localhost:10000"
+accounting_docker_url: "http://accounting:10000"

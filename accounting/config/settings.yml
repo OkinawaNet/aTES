@@ -1,5 +1,5 @@
 faraday:
   default_timeout: 10
 karafka:
-  client_id: 'task-tracker'
+  client_id: 'accounting'
   bootstrap_server: 'kafka:29092'
