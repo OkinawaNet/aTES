@@ -47,6 +47,7 @@ services:
     command:
       - start-dev
       - --http-relative-path=/auth
+  # Business
   task-tracker:
     build: ./task_tracker
     container_name: task-tracker
@@ -64,10 +65,33 @@ services:
         condition: service_healthy
       kafka:
         condition: service_started
-
     environment:
       RAILS_ENV: development
       DATABASE_NAME: ates_task_tracker_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
+
+  accounting:
+    build: ./accounting
+    container_name: accounting
+    networks:
+      - ates
+    volumes:
+      - ./accounting:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
+    ports:
+      - "10000:10000"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_accounting_development
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: postgres
@@ -99,7 +123,6 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-
 
   kafka-ui:
     image: provectuslabs/kafka-ui
