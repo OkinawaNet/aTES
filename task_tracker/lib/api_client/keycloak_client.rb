@@ -17,13 +17,13 @@ module ApiClient
     end
 
     def get_webhooks
-      get_all_webhooks.filter { |webhook| webhook['url'] == Settings.task_tracker_docker_url }
+      get_all_webhooks.filter { |webhook| webhook['url'] == callback_url }
     end
 
     def create_webhook(event_types = ['*'], enabled = true)
       post('/webhooks', {
         "enabled": enabled,
-        "url": "#{Settings.task_tracker_docker_url}/callbacks/keycloak_events",
+        "url": callback_url,
         "eventTypes": event_types
       })
 
@@ -41,6 +41,10 @@ module ApiClient
     end
 
     private
+
+    def callback_url
+      "#{Settings.task_tracker_docker_url}/callbacks/keycloak_events"
+    end
 
     def get(path)
       token = get_admin_token
