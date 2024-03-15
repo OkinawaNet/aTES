@@ -59,7 +59,9 @@ class CallbacksController < ApplicationController
     params['resourcePath'].split('/').second
   end
 
+  # Yeah Yikes, nice API
   def resource_representation
-    JSON.parse(params[:representation]).first
+    Array.wrap(JSON.parse(params[:representation])).first
   end
+
 end
