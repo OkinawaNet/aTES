@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: ates_task_tracker_development
+  database: ates_accounting_development
   username: postgres
   password: postgres
   host: postgres
@@ -13,5 +13,5 @@ development:
 
 test:
   <<: *default
-  database: ates_task_tracker_development_test
+  database: ates_accounting_development_test
 

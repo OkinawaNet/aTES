@@ -274,7 +274,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
   config.omniauth :keycloak_openid,
-    ENV.fetch('OMNIAUTH_CLIENT', 'task_tracker'),
+    ENV.fetch('OMNIAUTH_CLIENT', 'accounting'),
     ENV.fetch('OMNIAUTH_SECRET', ''),
     client_options: {
       site: Settings.keycloak.docker_url,

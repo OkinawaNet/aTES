@@ -43,7 +43,7 @@ module ApiClient
     private
 
     def callback_url
-      "#{Settings.task_tracker_docker_url}/callbacks/keycloak_events"
+      "#{Settings.accounting_docker_url}/callbacks/keycloak_events"
     end
 
     def get(path)
