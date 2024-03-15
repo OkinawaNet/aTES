@@ -49,6 +49,7 @@ services:
     command:
       - start-dev
       - --http-relative-path=/auth
+
   # Business
   task-tracker:
     build: ./task_tracker
