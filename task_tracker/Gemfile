@@ -18,6 +18,7 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem 'state_machines'
 gem "bootsnap", require: false
+gem 'slim-rails'
 
 # auth
 gem 'devise'
