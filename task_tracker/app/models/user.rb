@@ -6,6 +6,8 @@ class User < ApplicationRecord
   #        :recoverable, :rememberable, :validatable
   devise :omniauthable, omniauth_providers: %i[keycloakopenid]
 
+  has_many :tasks
+
   def self.from_omniauth(auth)
     auth = JSON.parse auth.to_json, object_class: OpenStruct
     where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|

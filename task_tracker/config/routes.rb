@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  resources :tasks
-  resources :tasks, only: [:index, :new, :create, :edit, :update] do
+  resources :tasks, only: [:index, :new, :create] do
     post :close, on: :member
   end
 

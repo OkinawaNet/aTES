@@ -1,4 +1,4 @@
-div id="#{dom_id task}"
+div id="#{dom_id task}" style="border:1px solid black;"
   p
     strong State:
     =< task.state
@@ -7,4 +7,6 @@ div id="#{dom_id task}"
     =< task.public_id
   p
     strong User:
-    =< task.user_id
+    =< task.user.first_name
+    =< task.user.public_id
+

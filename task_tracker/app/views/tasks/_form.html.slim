@@ -7,16 +7,8 @@
           li = error.full_message
 
   div
-    = form.label :state, style: "display: block"
-    = form.text_field :state
-
-  div
-    = form.label :public_id, style: "display: block"
-    = form.text_field :public_id
-
-  div
     = form.label :user_id, style: "display: block"
-    = form.text_field :user_id
+    = form.select :user_id, @users.map{|c| [c.first_name, c.id]}
 
   div
     = form.submit
