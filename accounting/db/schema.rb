@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_14_221825) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_21_170021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "billing_cycles", force: :cascade do |t|
+    t.datetime "start_at"
+    t.datetime "finish_at"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
@@ -22,6 +30,30 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_14_221825) do
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "state"
+    t.uuid "public_id"
+    t.bigint "user_id"
+    t.integer "assign_price", default: 0, null: false
+    t.integer "close_price", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "description"
+    t.string "type"
+    t.integer "debit", default: 0, null: false
+    t.integer "credit", default: 0, null: false
+    t.integer "user_balance", default: 0, null: false
+    t.uuid "public_id", null: false
+    t.integer "task_id"
+    t.integer "billing_cycle_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -38,6 +70,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_14_221825) do
     t.string "uid"
     t.string "password"
     t.uuid "public_id"
+    t.integer "balance", default: 0, null: false
+    t.bigint "billing_cycle_id"
+    t.integer "billing_cycle_period", default: 300, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
