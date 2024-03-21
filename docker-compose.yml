@@ -1,142 +1,142 @@
 version: "3.9"
 
 services:
-#  postgres:
-#    image: postgres:16.2
-#    container_name: postgres
-#    networks:
-#      - ates
-#    healthcheck:
-#      test: "pg_isready -U $$POSTGRES_USER"
-#      interval: 10s
-#      timeout: 5s
-#      retries: 10
-#    environment:
-#      - POSTGRES_DB=postgres
-#      - POSTGRES_HOST=localhost
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    volumes:
-#      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-#      - ./db/storage:/var/lib/postgresql/data
-#    ports:
-#      - "5436:5432"
-#
-#  # AuthZ & AuthN
-#  keycloak:
-#    image: quay.io/phasetwo/phasetwo-keycloak:23.0.7
-#    container_name: keycloak
-#    depends_on:
-#      - postgres
-#    networks:
-#      - ates
-#    environment:
-#      - KC_DB=postgres
-#      - KC_DB_URL_HOST=postgres
-#      - KC_DB_URL_DATABASE=ates_keycloak
-#      - KC_DB_USERNAME=postgres
-#      - KC_DB_PASSWORD=postgres
-#      - KC_HEALTH_ENABLED=true
-#      - KEYCLOAK_ADMIN=admin
-#      - KEYCLOAK_ADMIN_PASSWORD=admin
-#    healthcheck:
-#      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /auth/health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3" ]
-#      interval: 5s
-#      timeout: 5s
-#      retries: 50
-#    ports:
-#      - "7000:8080"
-#    command:
-#      - start-dev
-#      - --http-relative-path=/auth
-#
-#  # Business
-#  task-tracker:
-#    build: ./task_tracker
-#    container_name: task-tracker
-#    networks:
-#      - ates
-#    volumes:
-#      - ./task_tracker:/code:cached
-#    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 9000 -b '0.0.0.0'"
-#    ports:
-#      - "9000:9000"
-#    depends_on:
-#      postgres:
-#        condition: service_started
-#      keycloak:
-#        condition: service_healthy
-#    #      kafka:
-#    #        condition: service_started
-#    environment:
-#      RAILS_ENV: development
-#      DATABASE_NAME: ates_task_tracker_development
-#      DATABASE_USER: postgres
-#      DATABASE_PASSWORD: postgres
-#      DATABASE_HOST: postgres
-#
-#  accounting:
-#    build: ./accounting
-#    container_name: accounting
-#    networks:
-#      - ates
-#    volumes:
-#      - ./accounting:/code:cached
-#    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
-#    ports:
-#      - "10000:10000"
-#    depends_on:
-#      postgres:
-#        condition: service_started
-#      keycloak:
-#        condition: service_healthy
-##      kafka:
-##        condition: service_started
-#    environment:
-#      RAILS_ENV: development
-#      DATABASE_NAME: ates_accounting_development
-#      DATABASE_USER: postgres
-#      DATABASE_PASSWORD: postgres
-#      DATABASE_HOST: postgres
-#
-#  analytics:
-#    build: ./analytics
-#    container_name: analytics
-#    networks:
-#      - ates
-#    volumes:
-#      - ./analytics:/code:cached
-#    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 11000 -b '0.0.0.0'"
-#    ports:
-#      - "11000:11000"
-#    depends_on:
-#      postgres:
-#        condition: service_started
-#      keycloak:
-#        condition: service_healthy
-##      kafka:
-##        condition: service_started
-#    environment:
-#      RAILS_ENV: development
-#      DATABASE_NAME: ates_analytics_development
-#      DATABASE_USER: postgres
-#      DATABASE_PASSWORD: postgres
-#      DATABASE_HOST: postgres
+  postgres:
+    image: postgres:16.2
+    container_name: postgres
+    networks:
+      - ates
+    healthcheck:
+      test: "pg_isready -U $$POSTGRES_USER"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_HOST=localhost
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/storage:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+
+  # AuthZ & AuthN
+  keycloak:
+    image: quay.io/phasetwo/phasetwo-keycloak:23.0.7
+    container_name: keycloak
+    depends_on:
+      - postgres
+    networks:
+      - ates
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=postgres
+      - KC_DB_URL_DATABASE=ates_keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    healthcheck:
+      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /auth/health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3" ]
+      interval: 5s
+      timeout: 5s
+      retries: 50
+    ports:
+      - "7000:8080"
+    command:
+      - start-dev
+      - --http-relative-path=/auth
+
+  # Business
+  task-tracker:
+    build: ./task_tracker
+    container_name: task-tracker
+    networks:
+      - ates
+    volumes:
+      - ./task_tracker:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 9000 -b '0.0.0.0'"
+    ports:
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_task_tracker_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
+
+  accounting:
+    build: ./accounting
+    container_name: accounting
+    networks:
+      - ates
+    volumes:
+      - ./accounting:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
+    ports:
+      - "10000:10000"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_accounting_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
+
+  analytics:
+    build: ./analytics
+    container_name: analytics
+    networks:
+      - ates
+    volumes:
+      - ./analytics:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 11000 -b '0.0.0.0'"
+    ports:
+      - "11000:11000"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_analytics_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
 
   # Kafka cluster
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    user: "1000"
     ports:
       - 22181:2181
     networks:
       - ates
     volumes:
-      - /volumes/zk-data:/var/lib/zookeeper/data
-      - /volumes/zk-txn-logs:/var/lib/zookeeper/log
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -147,7 +147,6 @@ services:
     networks:
       - ates
     hostname: kafka
-    user: "1000"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -155,24 +154,29 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     volumes:
-      - ./volumes/kafka-data:/var/lib/kafka/data
-#
-#  kafka-ui:
-#    image: provectuslabs/kafka-ui
-#    container_name: kafka-ui
-#    ports:
-#      - 12000:8080
-#    networks:
-#      - ates
-#    restart: always
-#    environment:
-#      - KAFKA_CLUSTERS_0_NAME=local
-#      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
-#      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
-#    links:
-#      - kafka
-#      - zookeeper
+      - kafka-data:/var/lib/kafka/data
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - 12000:8080
+    networks:
+      - ates
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    links:
+      - kafka
+      - zookeeper
 
 networks:
   ates:
+volumes:
+  zookeeper-data:
+  zookeeper-log:
+  kafka-data:
+
 
