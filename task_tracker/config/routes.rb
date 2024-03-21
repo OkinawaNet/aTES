@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :tasks, only: [:index, :new, :create] do
     post :close, on: :member
   end
+  post "assign_tasks" => "tasks#assign_tasks"
 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 

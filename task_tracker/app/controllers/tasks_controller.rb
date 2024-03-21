@@ -28,7 +28,11 @@ class TasksController < ApplicationController
   end
 
   def close
-    # @task
+    @task.close!
+  end
+
+  def assign_tasks
+    shuffle(Task.open, User.with_role(:popug))
   end
 
   private
@@ -43,5 +47,11 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:user_id)
+  end
+
+  def shuffle(tasks, users)
+    tasks.each do |task|
+      task.update(user: users.sample)
+    end
   end
 end
