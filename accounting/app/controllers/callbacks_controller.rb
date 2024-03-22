@@ -43,7 +43,12 @@ class CallbacksController < ApplicationController
 
   def on_role_mapping_created
     logger.info('on_role_mapping_created')
-    user.add_role(resource_representation['name'].to_sym)
+    role = resource_representation['name'].to_sym
+    user.add_role(role)
+
+    return unless user.has_role?(:popug)
+
+    BillingCycle.create(user: user) if BillingCycle.where(user: user).open.empty?
   end
 
   def on_role_mapping_deleted

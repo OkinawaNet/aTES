@@ -1,7 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :billing_cycle
-  has_one :task
+  belongs_to :task
 
   before_create :set_public_id, :set_billing_cycle
 
@@ -12,6 +12,6 @@ class Transaction < ApplicationRecord
   end
 
   def set_billing_cycle
-    self.billing_cycle = BillingCycle.first_or_create(user: user)
+    self.billing_cycle = user.billing_cycles.open.last
   end
 end

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :transactions
+  resources :users, only: [:index, :show]
+
   get 'home/index'
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
@@ -12,5 +13,5 @@ Rails.application.routes.draw do
   post 'callbacks/keycloak_events', to: 'callbacks#keycloak_events'
 
   # Defines the root path route ("/")
-  root :to => "home#index"
+  root :to => "users#index"
 end

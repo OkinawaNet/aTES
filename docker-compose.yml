@@ -99,6 +99,27 @@ services:
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: postgres
 
+#  accounting-bg-worker:
+#    build: ./accounting
+#    networks:
+#      - ates
+#    volumes:
+#      - ./accounting:/code:cached
+#    command: bash -c "bundle exec clockwork config/clockwork.rb"
+#    depends_on:
+#      postgres:
+#        condition: service_started
+#      keycloak:
+#        condition: service_healthy
+#    #      kafka:
+#    #        condition: service_started
+#    environment:
+#      RAILS_ENV: development
+#      DATABASE_NAME: ates_accounting_development
+#      DATABASE_USER: postgres
+#      DATABASE_PASSWORD: postgres
+#      DATABASE_HOST: postgres
+
 #  analytics:
 #    build: ./analytics
 #    container_name: analytics
@@ -114,8 +135,8 @@ services:
 #        condition: service_started
 #      keycloak:
 #        condition: service_healthy
-#      kafka:
-#        condition: service_started
+##      kafka:
+##        condition: service_started
 #    environment:
 #      RAILS_ENV: development
 #      DATABASE_NAME: ates_analytics_development

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: %i[keycloakopenid]
 
   has_many :billing_cycles
+  has_many :transactions
   has_many :tasks
 
   def self.from_omniauth(auth)

@@ -16,7 +16,7 @@ gem "stimulus-rails"
 
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
-gem 'state_machines'
+gem 'state_machines-activerecord'
 gem "bootsnap", require: false
 gem 'slim-rails'
 
@@ -31,6 +31,7 @@ gem 'cancancan'
 gem 'faraday'
 gem 'httplog'
 
+gem 'clockwork'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
