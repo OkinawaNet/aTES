@@ -2,4 +2,4 @@ faraday:
   default_timeout: 10
 karafka:
   client_id: 'analytics'
-  bootstrap_server: 'kafka:29092'
+  bootstrap_server: 'kafka:9092'

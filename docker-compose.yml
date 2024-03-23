@@ -51,74 +51,74 @@ services:
       - --http-relative-path=/auth
 
   # Business
-#  task-tracker:
-#    build: ./task_tracker
-#    container_name: task-tracker
-#    networks:
-#      - ates
-#    volumes:
-#      - ./task_tracker:/code:cached
-#    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 9000 -b '0.0.0.0'"
-#    ports:
-#      - "9000:9000"
-#    depends_on:
-#      postgres:
-#        condition: service_started
-#      keycloak:
-#        condition: service_healthy
-#      kafka:
-#        condition: service_started
-#    environment:
-#      RAILS_ENV: development
-#      DATABASE_NAME: ates_task_tracker_development
-#      DATABASE_USER: postgres
-#      DATABASE_PASSWORD: postgres
-#      DATABASE_HOST: postgres
+  task-tracker:
+    build: ./task_tracker
+    container_name: task-tracker
+    networks:
+      - ates
+    volumes:
+      - ./task_tracker:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 9000 -b '0.0.0.0'"
+    ports:
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_task_tracker_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
 
-#  accounting:
-#    build: ./accounting
-#    container_name: accounting
-#    networks:
-#      - ates
-#    volumes:
-#      - ./accounting:/code:cached
-#    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
-#    ports:
-#      - "10000:10000"
-#    depends_on:
-#      postgres:
-#        condition: service_started
-#      keycloak:
-#        condition: service_healthy
-##      kafka:
-##        condition: service_started
-#    environment:
-#      RAILS_ENV: development
-#      DATABASE_NAME: ates_accounting_development
-#      DATABASE_USER: postgres
-#      DATABASE_PASSWORD: postgres
-#      DATABASE_HOST: postgres
+  accounting:
+    build: ./accounting
+    container_name: accounting
+    networks:
+      - ates
+    volumes:
+      - ./accounting:/code:cached
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
+    ports:
+      - "10000:10000"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_accounting_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
 
-#  accounting-bg-worker:
-#    build: ./accounting
-#    networks:
-#      - ates
-#    volumes:
-#      - ./accounting:/code:cached
-#    command: bash -c "bundle exec clockwork config/clockwork.rb"
-#    depends_on:
-#      postgres:
-#        condition: service_started
-#      keycloak:
-#        condition: service_healthy
-#    #      kafka:
-#    #        condition: service_started
-#    environment:
-#      RAILS_ENV: development
-#      DATABASE_NAME: ates_accounting_development
-#      DATABASE_USER: postgres
-#      DATABASE_PASSWORD: postgres
-#      DATABASE_HOST: postgres
+  accounting-bg-worker:
+    build: ./accounting
+    networks:
+      - ates
+    volumes:
+      - ./accounting:/code:cached
+    command: bash -c "bundle exec clockwork config/clockwork.rb"
+    depends_on:
+      postgres:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: ates_accounting_development
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: postgres
 
   analytics:
     build: ./analytics
@@ -135,8 +135,8 @@ services:
         condition: service_started
       keycloak:
         condition: service_healthy
-#      kafka:
-#        condition: service_started
+      kafka:
+        condition: service_started
     environment:
       RAILS_ENV: development
       DATABASE_NAME: ates_analytics_development
@@ -144,54 +144,55 @@ services:
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: postgres
 
-  # Kafka cluster
-#  zookeeper:
-#    image: confluentinc/cp-zookeeper:latest
-#    container_name: zookeeper
-#    environment:
-#      ZOOKEEPER_CLIENT_PORT: 2181
-#      ZOOKEEPER_TICK_TIME: 2000
-#    ports:
-#      - 22181:2181
-#    networks:
-#      - ates
-#    volumes:
-#      - zookeeper-data:/var/lib/zookeeper/data
-#      - zookeeper-log:/var/lib/zookeeper/log
-#
-#  kafka:
-#    image: confluentinc/cp-kafka:7.6.0
-#    depends_on:
-#      - zookeeper
-#    ports:
-#      - 9092:9092
-#    networks:
-#      - ates
-#    hostname: kafka
-#    environment:
-#      KAFKA_BROKER_ID: 1
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-#    volumes:
-#      - kafka-data:/var/lib/kafka/data
-#
-#  kafka-ui:
-#    image: provectuslabs/kafka-ui
-#    container_name: kafka-ui
-#    ports:
-#      - 12000:8080
-#    networks:
-#      - ates
-#    restart: always
-#    environment:
-#      - KAFKA_CLUSTERS_0_NAME=local
-#      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
-#      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
-#    links:
-#      - kafka
-#      - zookeeper
+#   Kafka cluster
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - ates
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    networks:
+      - ates
+    hostname: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - 12000:8080
+    networks:
+      - ates
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    links:
+      - kafka
+      - zookeeper
 
 networks:
   ates:

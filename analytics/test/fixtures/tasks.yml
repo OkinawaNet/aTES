@@ -1,4 +1,15 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id          :bigint           not null, primary key
+#  state       :string
+#  public_id   :uuid
+#  user_id     :bigint
+#  close_price :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 
 one:
   state: MyString
