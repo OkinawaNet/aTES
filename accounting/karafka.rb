@@ -6,6 +6,7 @@ class KarafkaApp < Karafka::App
     config.kafka = {
       'bootstrap.servers': Settings.karafka.bootstrap_server
     }
+
   end
 
   Karafka.monitor.subscribe(Karafka::Instrumentation::LoggerListener.new)
@@ -19,6 +20,10 @@ class KarafkaApp < Karafka::App
   routes.draw do
     topic 'tasks-streaming' do
       consumer TasksStreamingConsumer
+    end
+
+    topic 'tasks-workflow' do
+      consumer TasksWorkflowConsumer
     end
   end
 end

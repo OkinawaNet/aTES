@@ -16,4 +16,7 @@
 #  updated_at     :datetime         not null
 #
 class Transaction < ApplicationRecord
+  belongs_to :user
+  belongs_to :task, optional: true
+
 end
