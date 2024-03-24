@@ -82,7 +82,7 @@ services:
       - ates
     volumes:
       - ./accounting:/code:cached
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
+    command: bash -c "(bundle exec karafka server &) && rm -f tmp/pids/server.pid && bundle exec rails s -p 10000 -b '0.0.0.0'"
     ports:
       - "10000:10000"
     depends_on:
@@ -99,26 +99,26 @@ services:
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: postgres
 
-  accounting-bg-worker:
-    build: ./accounting
-    networks:
-      - ates
-    volumes:
-      - ./accounting:/code:cached
-    command: bash -c "bundle exec clockwork config/clockwork.rb"
-    depends_on:
-      postgres:
-        condition: service_started
-      keycloak:
-        condition: service_healthy
-      kafka:
-        condition: service_started
-    environment:
-      RAILS_ENV: development
-      DATABASE_NAME: ates_accounting_development
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_HOST: postgres
+#  accounting-bg-worker:
+#    build: ./accounting
+#    networks:
+#      - ates
+#    volumes:
+#      - ./accounting:/code:cached
+#    command: bash -c "bundle exec clockwork config/clockwork.rb"
+#    depends_on:
+#      postgres:
+#        condition: service_started
+#      keycloak:
+#        condition: service_healthy
+#      kafka:
+#        condition: service_started
+#    environment:
+#      RAILS_ENV: development
+#      DATABASE_NAME: ates_accounting_development
+#      DATABASE_USER: postgres
+#      DATABASE_PASSWORD: postgres
+#      DATABASE_HOST: postgres
 
   analytics:
     build: ./analytics
@@ -127,7 +127,7 @@ services:
       - ates
     volumes:
       - ./analytics:/code:cached
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 11000 -b '0.0.0.0'"
+    command: bash -c "(bundle exec karafka server &) && rm -f tmp/pids/server.pid && bundle exec rails s -p 11000 -b '0.0.0.0'"
     ports:
       - "11000:11000"
     depends_on:
@@ -169,6 +169,7 @@ services:
       - ates
     hostname: kafka
     environment:
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092

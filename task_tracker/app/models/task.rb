@@ -24,15 +24,14 @@ class Task < ApplicationRecord
   end
 
   def broadcast
-    # Karafka.producer.produce_async(
-    #   topic: 'tasks-streaming',
-    #   payload: {
-    #     id: id,
-    #     public_id: visited_at,
-    #     visitor_id: visitor_id,
-    #     page_path: page_path
-    #   }.to_json
-    # )
+    Karafka.producer.produce_async(
+      topic: 'tasks-streaming',
+      payload: {
+        public_id: public_id,
+        assigned_user_public_id: user.public_id,
+        state: state
+      }.to_json
+    )
   end
 
   private
