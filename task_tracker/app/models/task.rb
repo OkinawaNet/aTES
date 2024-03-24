@@ -13,7 +13,8 @@ class Task < ApplicationRecord
   belongs_to :user
 
   before_create :set_public_id
-  after_create :broadcast, :produce_task_assigned
+  after_create :broadcast
+  after_save :produce_task_assigned, if: :saved_change_to_user_id?
 
   scope :open, -> { where(state: :open) }
 
