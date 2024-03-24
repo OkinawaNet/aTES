@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Example consumer that prints messages payloads
-class ExampleConsumer < ApplicationConsumer
+class TasksConsumer < ApplicationConsumer
   def consume
     messages.each { |message| puts message.payload }
   end
