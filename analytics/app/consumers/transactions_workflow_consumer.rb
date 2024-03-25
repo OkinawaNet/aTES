@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TasksWorkflowConsumer < ApplicationConsumer
+class TransactionsWorkflowConsumer < ApplicationConsumer
   def consume
     messages.each { |message| process_message(message) }
   end
@@ -9,16 +9,16 @@ class TasksWorkflowConsumer < ApplicationConsumer
 
   def process_message(message)
     case message.payload['event']
-    when 'task_assigned'
-      on_task_assigned(message.payload['data'])
-    when 'task_closed'
-      on_task_closed(message.payload['data'])
+    when 'transaction_created'
+      on_transaction_created(message.payload['data'])
     end
   end
 
-  def on_task_assigned(data)
+  def on_transaction_created(data)
     if task = Task.find_by!(public_id: data['public_id'])
       assigned_user = User.find_by!(public_id: data['assigned_user_public_id'])
+
+      task.update(user: assigned_user)
 
       create_assign_user_transaction(task, assigned_user)
     end
@@ -26,6 +26,8 @@ class TasksWorkflowConsumer < ApplicationConsumer
 
   def on_task_closed(data)
     if task = Task.find_by!(public_id: data['public_id'])
+      task.update(state: data['state'])
+
       create_task_closed_transaction(task, task.user)
     end
   end

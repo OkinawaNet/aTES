@@ -13,8 +13,15 @@ class Task < ApplicationRecord
   belongs_to :user
 
   before_create :set_public_id
-  after_create :broadcast
-  after_save :produce_task_assigned, if: :saved_change_to_user_id?
+
+  # streaming
+  after_create :produce_task_created
+  after_update :produce_task_udated
+
+  # workflow
+  after_create :produce_task_assigned
+  after_update :produce_task_assigned, if: :saved_change_to_user_id?
+  after_update :produce_task_closed, if: :saved_change_to_state?
 
   scope :open, -> { where(state: :open) }
 
@@ -26,11 +33,25 @@ class Task < ApplicationRecord
 
   private
 
-  def broadcast
+  def produce_task_created
     Karafka.producer.produce_async(
       topic: 'tasks-streaming',
       payload: {
         event: 'task_created',
+        data: {
+          public_id: public_id,
+          assigned_user_public_id: user.public_id,
+          state: state
+        }
+      }.to_json
+    )
+  end
+
+  def produce_task_udated
+    Karafka.producer.produce_async(
+      topic: 'tasks-streaming',
+      payload: {
+        event: 'task_updated',
         data: {
           public_id: public_id,
           assigned_user_public_id: user.public_id,
@@ -48,6 +69,19 @@ class Task < ApplicationRecord
         data: {
           public_id: public_id,
           assigned_user_public_id: user.public_id
+        }
+      }.to_json
+    )
+  end
+
+  def produce_task_closed
+    Karafka.producer.produce_async(
+      topic: 'tasks-workflow',
+      payload: {
+        event: 'task_closed',
+        data: {
+          public_id: public_id,
+          state: state
         }
       }.to_json
     )
