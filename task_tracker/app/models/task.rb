@@ -16,7 +16,7 @@ class Task < ApplicationRecord
 
   # streaming
   after_create :produce_task_created
-  after_update :produce_task_udated
+  after_update :produce_task_updated
 
   # workflow
   after_create :produce_task_assigned
@@ -47,7 +47,7 @@ class Task < ApplicationRecord
     )
   end
 
-  def produce_task_udated
+  def produce_task_updated
     Karafka.producer.produce_async(
       topic: 'tasks-streaming',
       payload: {

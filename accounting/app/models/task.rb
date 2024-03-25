@@ -20,8 +20,6 @@ class Task < ApplicationRecord
   scope :open, -> { where(state: :open) }
   scope :closed, -> { where(state: :closed) }
 
-  state_machine :state, initial: :open
-
   private
 
   def set_assign_price
