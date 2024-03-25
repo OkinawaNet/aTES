@@ -20,12 +20,34 @@ class Transaction < ApplicationRecord
   belongs_to :billing_cycle
   belongs_to :task, optional: true
 
+  # streaming
+  after_create :produce_transaction_created
+
   before_create :set_public_id
 
   private
 
+  def produce_transaction_created
+    Karafka.producer.produce_async(
+      topic: 'transactions-workflow',
+      payload: {
+        event: 'transaction_created',
+        data: {
+          debit: debit,
+          credit: credit,
+          description: description,
+          public_id: public_id,
+          assigned_user_public_id: user.public_id,
+          task_public_id: task.public_id,
+          billing_cycle_id: billing_cycle_id,
+          user_balance: user.balance,
+          created_at: created_at
+        }
+      }.to_json
+    )
+  end
+
   def set_public_id
     self.public_id = SecureRandom.uuid
   end
-
 end

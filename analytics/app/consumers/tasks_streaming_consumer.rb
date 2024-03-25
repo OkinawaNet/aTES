@@ -24,18 +24,14 @@ class TasksStreamingConsumer < ApplicationConsumer
 
   def on_task_updated(data)
     task = Task.find_by!(public_id: data['public_id'])
-    puts('found task with ID')
-    puts(task.public_id)
     assigned_user = User.find_by(public_id: data['assigned_user_public_id'])
-    puts('found user with ID')
-    puts(assigned_user.public_id)
+
     payload = {
       state: data['state'],
       user: assigned_user,
       close_price: data['close_price']
     }.compact
-    puts('prepared payload')
-    puts(payload.inspect)
+
     task.update(payload)
   end
 end

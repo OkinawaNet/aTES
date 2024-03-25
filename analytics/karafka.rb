@@ -20,5 +20,9 @@ class KarafkaApp < Karafka::App
     topic 'tasks-streaming' do
       consumer TasksStreamingConsumer
     end
+
+    topic 'transactions-workflow' do
+      consumer TransactionsWorkflowConsumer
+    end
   end
 end
