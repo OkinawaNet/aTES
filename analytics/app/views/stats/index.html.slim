@@ -1,14 +1,15 @@
-p style="color: green" = notice
+- if user_signed_in?
+  p style="color: green" = notice
 
-style
-  |  table { border: 1px solid black; border-collapse: collapse; width: 1400px; } tr { border: 1px solid black; } td { border: 1px solid black; } th { border: 1px solid black; } }
+  style
+    |  table { border: 1px solid black; border-collapse: collapse; width: 1400px; } tr { border: 1px solid black; } td { border: 1px solid black; } th { border: 1px solid black; } }
 
-h1 Статистика по задачам
+  h1 Статистика по задачам
 
-= render 'tasks'
+  = render 'tasks'
 
-h1 Статистика по банкротам
+  h1 Статистика по банкротам
 
-= render 'users'
-
-
+  = render 'users'
+- else
+  = button_to 'Login with Keycloak', user_keycloakopenid_omniauth_authorize_path, data: {turbo: false}, method: :post

@@ -1,9 +1,12 @@
-p style="color: green" = notice
+- if user_signed_in?
+  p style="color: green" = notice
 
-h1 Popugs
+  h1 Popugs
 
-#users
-  - @users.each do |user|
-    == render user
-    p
-      = link_to "Show transactions", user
+  #users
+    - @users.each do |user|
+      == render user
+      p
+        = link_to "Show transactions", user
+- else
+  = button_to 'Login with Keycloak', user_keycloakopenid_omniauth_authorize_path, data: {turbo: false}, method: :post
