@@ -16,6 +16,7 @@
 #  uid                    :string
 #  password               :string
 #  public_id              :uuid
+#  balance                :integer          default(0), not null
 #
 require "test_helper"
 

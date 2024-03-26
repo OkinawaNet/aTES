@@ -5,11 +5,8 @@ table
       th Public ID
       th Баланс
   tbody
-    tr
-      td Uberpopug333
-      td XXX
-      td -99000
-    tr
-      td Uberpopug333228
-      td XXX
-      td -99000
+    - @bankrupts.each do |user|
+      tr
+        td = user.first_name
+        td = user.public_id
+        td = user.balance

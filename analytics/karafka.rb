@@ -19,6 +19,16 @@ class KarafkaApp < Karafka::App
   routes.draw do
     topic 'tasks-streaming' do
       consumer TasksStreamingConsumer
+
+      dead_letter_queue(
+        topic: 'tasks-streaming-dlq',
+        max_retries: 0,
+        independent: false
+      )
+    end
+
+    topic 'tasks-streaming-dlq' do
+      consumer TasksStreamingConsumer
     end
 
     topic 'transactions-workflow' do

@@ -16,6 +16,7 @@
 #  uid                    :string
 #  password               :string
 #  public_id              :uuid
+#  balance                :integer          default(0), not null
 #
 
 # This model initially had no columns defined. If you add columns to the

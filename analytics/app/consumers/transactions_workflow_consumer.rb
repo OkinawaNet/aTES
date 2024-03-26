@@ -31,6 +31,8 @@ class TransactionsWorkflowConsumer < ApplicationConsumer
     }.compact
 
     Transaction.create(payload)
+
+    assigned_user.update(balance: data['user_balance'])
   end
 
   def get_user_balance(user)
