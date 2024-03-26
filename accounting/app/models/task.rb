@@ -10,6 +10,7 @@
 #  close_price  :integer          default(0), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  description  :string
 #
 class Task < ApplicationRecord
   belongs_to :user

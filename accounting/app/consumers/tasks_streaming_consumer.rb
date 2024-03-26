@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TasksStreamingConsumer < ApplicationConsumer
-  # delegate :logger, to: Rails
   def consume
     messages.each { |message| process_message(message) }
   end
@@ -19,7 +18,7 @@ class TasksStreamingConsumer < ApplicationConsumer
 
   def on_task_created(data)
     assigned_user = User.find_by(public_id: data['assigned_user_public_id'])
-    Task.find_or_create_by(public_id: data['public_id'], user: assigned_user, state: data['state'])
+    Task.find_or_create_by(public_id: data['public_id'], user: assigned_user, state: data['state'], description: data['description'])
   end
 
   def on_task_updated(data)
@@ -28,7 +27,8 @@ class TasksStreamingConsumer < ApplicationConsumer
     payload = {
       state: data['state'],
       user: assigned_user,
-      close_price: data['close_price']
+      close_price: data['close_price'],
+      description: data['description']
     }.compact
     task.update(payload)
   end

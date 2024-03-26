@@ -17,6 +17,7 @@ docker-compose up
 - TaskTracker: [http://localhost:9000](http://localhost:9000)
 - Accounting: [http://localhost:10000](http://localhost:10000)
 - Analytics: [http://localhost:11000](http://localhost:11000)
+- KafkaUI: [http://localhost:12000](http://localhost:12000)
 
 ## Схема:
 ### Event Storming

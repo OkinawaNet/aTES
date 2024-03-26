@@ -9,6 +9,7 @@
 #  close_price :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  description :string
 #
 require "test_helper"
 

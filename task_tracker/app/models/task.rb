@@ -2,13 +2,15 @@
 #
 # Table name: tasks
 #
-#  id         :bigint           not null, primary key
-#  state      :string
-#  public_id  :uuid             not null
-#  user_id    :bigint
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :bigint           not null, primary key
+#  state       :string
+#  public_id   :uuid             not null
+#  user_id     :bigint
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  description :string
 #
+
 class Task < ApplicationRecord
   belongs_to :user
 
@@ -41,7 +43,8 @@ class Task < ApplicationRecord
         data: {
           public_id: public_id,
           assigned_user_public_id: user.public_id,
-          state: state
+          state: state,
+          description: description
         }
       }.to_json
     )
@@ -55,7 +58,8 @@ class Task < ApplicationRecord
         data: {
           public_id: public_id,
           assigned_user_public_id: user.public_id,
-          state: state
+          state: state,
+          description: description
         }
       }.to_json
     )

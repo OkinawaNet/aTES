@@ -46,7 +46,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:user_id)
+    params.require(:task).permit(:user_id, :description)
   end
 
   def shuffle(tasks, users)
