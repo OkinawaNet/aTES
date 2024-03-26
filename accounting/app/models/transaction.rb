@@ -38,9 +38,9 @@ class Transaction < ApplicationRecord
           description: description,
           public_id: public_id,
           assigned_user_public_id: user.public_id,
-          task_public_id: task.public_id,
+          task_public_id: task&.public_id,
           billing_cycle_id: billing_cycle_id,
-          user_balance: user.balance,
+          user_balance: user_balance,
           created_at: created_at
         }
       }.to_json
