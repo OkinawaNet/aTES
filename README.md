@@ -21,7 +21,7 @@ docker-compose up
 ## Схема:
 ### Event Storming
 ![Event Storming](images/hw_1/ES.png)
-### Data Model
+### Модель данных
 ![Data Model](images/hw_1/DM.png)
-### Services
+### Сервисы
 ![Services](images/hw_1/Services.png)
