@@ -1,0 +1,12 @@
+table
+  thead
+    tr
+      th Имя попуга
+      th Public ID
+      th Баланс
+  tbody
+    - @bankrupts.each do |user|
+      tr
+        td = user.first_name
+        td = user.public_id
+        td = user.balance

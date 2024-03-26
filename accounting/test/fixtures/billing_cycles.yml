@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: billing_cycles
+#
+#  id         :bigint           not null, primary key
+#  start_at   :datetime
+#  finish_at  :datetime
+#  user_id    :bigint           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  state      :string
+#
+
+one:
+  start_at: 2024-03-21 17:00:21
+  finish_at: 2024-03-21 17:00:21
+  user_id: 
+
+two:
+  start_at: 2024-03-21 17:00:21
+  finish_at: 2024-03-21 17:00:21
+  user_id: 

@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: ates_accounting_development
+  username: postgres
+  password: postgres
+  host: postgres
+  port: 5432
+
+test:
+  <<: *default
+  database: ates_accounting_development_test
+

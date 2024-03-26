@@ -1,0 +1,11 @@
+keycloak:
+  docker_url: 'http://keycloak:8080'
+  local_url: 'http://localhost:7000'
+  realm: 'master'
+  client_id: 'accounting'
+  credentials:
+    username: 'admin'
+    password: 'admin'
+
+accounting_local_url: "http://localhost:10000"
+accounting_docker_url: "http://accounting:10000"

@@ -1,0 +1,18 @@
+table
+  thead
+    tr
+      th Показатель
+      th Public ID
+      th Исполнитель
+      th Цена закрытия
+  tbody
+    tr
+      td Самая дорогая закрытая задача за 5 минут
+      td = @closed_task_five&.public_id
+      td = @closed_task_five&.user&.first_name
+      td = @closed_task_five&.close_price
+    tr
+      td Самая дорогая закрытая задача за всё время
+      td = @closed_task_all&.public_id
+      td = @closed_task_all&.user&.first_name
+      td = @closed_task_all&.close_price

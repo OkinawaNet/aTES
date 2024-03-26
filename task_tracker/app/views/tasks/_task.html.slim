@@ -1,0 +1,15 @@
+div id="#{dom_id task}" style="border:1px solid black;"
+  p
+    strong State:
+    =< task.state
+  p
+    strong Public id:
+    =< task.public_id
+  p
+    strong Popug:
+    =< task.user.first_name
+    =< task.user.public_id
+    - if task.open?
+      p
+      = button_to "Close task", close_task_path(task), method: :post
+

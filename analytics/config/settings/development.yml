@@ -1,0 +1,11 @@
+keycloak:
+  docker_url: 'http://keycloak:8080'
+  local_url: 'http://localhost:7000'
+  realm: 'master'
+  client_id: 'analytics'
+  credentials:
+    username: 'admin'
+    password: 'admin'
+
+analytics_local_url: "http://localhost:11000"
+analytics_docker_url: "http://analytics:11000"

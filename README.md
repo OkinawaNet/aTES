@@ -7,9 +7,9 @@ docker-compose up
 ```
 
 2) Настройка Keycloak:
-- Перейдите по адресу http://localhost:7000/auth
+- Перейдите по адресу http://localhost:7000/auth (admin/admin)
 - Активируйте события webhook в пользовательском интерфейсе администратора, перейдя в раздел Configure Realm Settings > Events tab > Event Listeners, в раскрывающемся списке слушателей событий выберите ext-event-webhook и сохраните изменения.
-- Добавьте клиентов
+- Добавьте клиенты: task_tracker, accounting, analytics
 - Создайте роль "popug"
 - Добавьте пользователей с ролью "popug"
 
