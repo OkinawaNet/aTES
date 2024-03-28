@@ -18,7 +18,7 @@ class Task < ApplicationRecord
 
   # streaming
   after_create :produce_task_created
-  after_update :produce_task_updated
+  after_update :produce_task_updated, if: :saved_changes?
 
   # workflow
   after_create :produce_task_assigned

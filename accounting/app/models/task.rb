@@ -18,7 +18,7 @@ class Task < ApplicationRecord
 
   before_create :set_assign_price, :set_close_price
   # streaming
-  after_update :produce_task_updated
+  after_update :produce_task_updated, if: :saved_changes?
 
   scope :open, -> { where(state: :open) }
   scope :closed, -> { where(state: :closed) }
