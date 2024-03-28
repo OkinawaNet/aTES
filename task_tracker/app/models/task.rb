@@ -10,15 +10,18 @@
 #  updated_at  :datetime         not null
 #  description :string
 #  title       :string
+#  jira_id     :string
 #
 
 class Task < ApplicationRecord
   belongs_to :user
 
   before_create :set_public_id
+  before_save :parse_title
 
   # streaming
   after_create :produce_task_created
+
   after_update :produce_task_updated, if: :saved_changes?
 
   # workflow
@@ -37,6 +40,14 @@ class Task < ApplicationRecord
   private
 
   def produce_task_created
+    if self.jira_id?
+      produce_task_created_v2
+    else
+      produce_task_created_v1
+    end
+  end
+
+  def produce_task_created_v1
     event = {
       event_id: SecureRandom.uuid,
       event_version: 1,
@@ -47,11 +58,38 @@ class Task < ApplicationRecord
         public_id: public_id,
         assigned_user_public_id: user.public_id,
         state: state,
+        title: title,
         description: description
       }
     }
 
     result = SchemaRegistry.validate_event(event, 'tasks-streaming.task_created', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'tasks-streaming', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
+  end
+
+  def produce_task_created_v2
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 2,
+      event_name: 'task_created',
+      event_time: DateTime.now.to_s,
+      producer: 'task_tracker',
+      data: {
+        public_id: public_id,
+        assigned_user_public_id: user.public_id,
+        state: state,
+        jira_id: jira_id,
+        title: title,
+        description: description
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'tasks-streaming.task_created', version: 2)
 
     if result.success?
       Karafka.producer.produce_async(topic: 'tasks-streaming', payload: event.to_json)
@@ -130,5 +168,13 @@ class Task < ApplicationRecord
 
   def set_public_id
     self.public_id = SecureRandom.uuid
+  end
+
+  def parse_title
+    jira_regex = /\[(\w+)\]\s?(.*)/
+    if match = self.title.match(jira_regex)
+      self.jira_id = match[1]
+      self.title = match[2]
+    end
   end
 end
