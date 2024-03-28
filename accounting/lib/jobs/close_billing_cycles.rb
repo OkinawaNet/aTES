@@ -3,6 +3,8 @@ module Jobs
     delegate :logger, to: Rails
 
     def call
+      return unless (DateTime.now.minute % 5).zero?
+
       User.where(balance: 1..).each do |user|
         logger.info("Closing billing cycle for user #{user.first_name}")
 

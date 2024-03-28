@@ -8,7 +8,7 @@ class TransactionsWorkflowConsumer < ApplicationConsumer
   private
 
   def process_message(message)
-    case message.payload['event']
+    case message.payload['event_name']
     when 'transaction_created'
       on_transaction_created(message.payload['data'])
     end

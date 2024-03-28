@@ -32,6 +32,10 @@ gem 'cancancan'
 gem 'faraday'
 gem 'httplog'
 
+# kafka
+gem "schema_registry", git: "https://github.com/davydovanton/event_schema_registry.git"
+gem "karafka", ">= 2.3.0"
+
 gem 'clockwork'
 
 group :development, :test do
@@ -46,5 +50,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "karafka", ">= 2.3.0"

@@ -42,7 +42,7 @@ class TasksController < ApplicationController
   end
 
   def set_users
-    @users = User.all
+    @users = User.with_role(:popug)
   end
 
   def task_params

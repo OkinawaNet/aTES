@@ -26,18 +26,25 @@ class Task < ApplicationRecord
   private
 
   def produce_task_updated
-    Karafka.producer.produce_async(
-      topic: 'tasks-streaming',
-      payload: {
-        event: 'task_updated',
-        data: {
-          public_id: public_id,
-          assigned_user_public_id: user.public_id,
-          state: state,
-          close_price: close_price
-        }
-      }.to_json
-    )
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_name: 'task_updated',
+      event_time: DateTime.now.to_s,
+      producer: 'accounting',
+      data: {
+        public_id: public_id,
+        close_price: close_price
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'tasks-streaming.task_updated', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'tasks-streaming', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
   end
 
   def set_assign_price

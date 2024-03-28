@@ -36,59 +36,95 @@ class Task < ApplicationRecord
   private
 
   def produce_task_created
-    Karafka.producer.produce_async(
-      topic: 'tasks-streaming',
-      payload: {
-        event: 'task_created',
-        data: {
-          public_id: public_id,
-          assigned_user_public_id: user.public_id,
-          state: state,
-          description: description
-        }
-      }.to_json
-    )
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_name: 'task_created',
+      event_time: DateTime.now.to_s,
+      producer: 'task_tracker',
+      data: {
+        public_id: public_id,
+        assigned_user_public_id: user.public_id,
+        state: state,
+        description: description
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'tasks-streaming.task_created', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'tasks-streaming', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
   end
 
   def produce_task_updated
-    Karafka.producer.produce_async(
-      topic: 'tasks-streaming',
-      payload: {
-        event: 'task_updated',
-        data: {
-          public_id: public_id,
-          assigned_user_public_id: user.public_id,
-          state: state,
-          description: description
-        }
-      }.to_json
-    )
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_name: 'task_updated',
+      event_time: DateTime.now.to_s,
+      producer: 'task_tracker',
+      data: {
+        public_id: public_id,
+        assigned_user_public_id: user.public_id,
+        state: state,
+        description: description
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'tasks-streaming.task_updated', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'tasks-streaming', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
   end
 
   def produce_task_assigned
-    Karafka.producer.produce_async(
-      topic: 'tasks-workflow',
-      payload: {
-        event: 'task_assigned',
-        data: {
-          public_id: public_id,
-          assigned_user_public_id: user.public_id
-        }
-      }.to_json
-    )
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_name: 'task_assigned',
+      event_time: DateTime.now.to_s,
+      producer: 'task_tracker',
+      data: {
+        public_id: public_id,
+        assigned_user_public_id: user.public_id
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'tasks-workflow.task_assigned', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'tasks-workflow', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
   end
 
   def produce_task_closed
-    Karafka.producer.produce_async(
-      topic: 'tasks-workflow',
-      payload: {
-        event: 'task_closed',
-        data: {
-          public_id: public_id,
-          state: state
-        }
-      }.to_json
-    )
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_name: 'task_closed',
+      event_time: DateTime.now.to_s,
+      producer: 'task_tracker',
+      data: {
+        public_id: public_id,
+        state: state
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'tasks-workflow.task_closed', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'tasks-workflow', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
   end
 
   def set_public_id
