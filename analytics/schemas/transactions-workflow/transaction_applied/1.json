@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
 
-  "title": "transactions-workflow.transaction_created.v1",
-  "description": "json schema for transaction_created event (version 1)",
+  "title": "transactions-workflow.transaction_applied.v1",
+  "description": "json schema for transaction_applied event (version 1)",
 
   "definitions": {
     "event_data": {
@@ -55,7 +55,7 @@
   "properties": {
     "event_id":      { "type": "string" },
     "event_version": { "enum": [1] },
-    "event_name":    { "enum": ["transaction_created"] },
+    "event_name":    { "enum": ["transaction_applied"] },
     "event_time":    { "type": "string" },
     "producer":      { "type": "string" },
 

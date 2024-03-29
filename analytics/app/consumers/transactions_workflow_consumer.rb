@@ -9,12 +9,12 @@ class TransactionsWorkflowConsumer < ApplicationConsumer
 
   def process_message(message)
     case message.payload['event_name']
-    when 'transaction_created'
-      on_transaction_created(message.payload['data'])
+    when 'transaction_applied'
+      on_transaction_applied(message.payload['data'])
     end
   end
 
-  def on_transaction_created(data)
+  def on_transaction_applied(data)
     task = Task.find_by!(public_id: data['task_public_id'])
     assigned_user = User.find_by!(public_id: data['assigned_user_public_id'])
 

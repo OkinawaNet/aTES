@@ -30,3 +30,6 @@ docker-compose up
 ![Data Model](images/hw_1/DM.png)
 ### Сервисы
 ![Services](images/hw_1/Services.png)
+
+
+

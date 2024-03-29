@@ -21,17 +21,17 @@ class Transaction < ApplicationRecord
   belongs_to :task, optional: true
 
   # streaming
-  after_create :produce_transaction_created
+  after_create :produce_transaction_applied
 
   before_create :set_public_id
 
   private
 
-  def produce_transaction_created
+  def produce_transaction_applied
     event = {
       event_id: SecureRandom.uuid,
       event_version: 1,
-      event_name: 'transaction_created',
+      event_name: 'transaction_applied',
       event_time: DateTime.now.to_s,
       producer: 'accounting',
       data: {
@@ -47,7 +47,7 @@ class Transaction < ApplicationRecord
       }
     }
 
-    result = SchemaRegistry.validate_event(event, 'transactions-workflow.transaction_created', version: 1)
+    result = SchemaRegistry.validate_event(event, 'transactions-workflow.transaction_applied', version: 1)
 
     if result.success?
       Karafka.producer.produce_async(topic: 'transactions-workflow', payload: event.to_json)
