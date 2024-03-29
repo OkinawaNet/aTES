@@ -21,30 +21,39 @@ class Transaction < ApplicationRecord
   belongs_to :task, optional: true
 
   # streaming
-  after_create :produce_transaction_created
+  after_create :produce_transaction_applied
 
   before_create :set_public_id
 
   private
 
-  def produce_transaction_created
-    Karafka.producer.produce_async(
-      topic: 'transactions-workflow',
-      payload: {
-        event: 'transaction_created',
-        data: {
-          debit: debit,
-          credit: credit,
-          description: description,
-          public_id: public_id,
-          assigned_user_public_id: user.public_id,
-          task_public_id: task&.public_id,
-          billing_cycle_id: billing_cycle_id,
-          user_balance: user_balance,
-          created_at: created_at
-        }
-      }.to_json
-    )
+  def produce_transaction_applied
+    event = {
+      event_id: SecureRandom.uuid,
+      event_version: 1,
+      event_name: 'transaction_applied',
+      event_time: DateTime.now.to_s,
+      producer: 'accounting',
+      data: {
+        debit: debit,
+        credit: credit,
+        description: description,
+        public_id: public_id,
+        assigned_user_public_id: user.public_id,
+        task_public_id: task&.public_id,
+        billing_cycle_id: billing_cycle_id,
+        user_balance: user_balance,
+        created_at: created_at.to_s
+      }
+    }
+
+    result = SchemaRegistry.validate_event(event, 'transactions-workflow.transaction_applied', version: 1)
+
+    if result.success?
+      Karafka.producer.produce_async(topic: 'transactions-workflow', payload: event.to_json)
+    else
+      Rails.logger.error(result.failure)
+    end
   end
 
   def set_public_id

@@ -8,7 +8,7 @@ class TasksWorkflowConsumer < ApplicationConsumer
   private
 
   def process_message(message)
-    case message.payload['event']
+    case message.payload['event_name']
     when 'task_closed'
       on_task_closed(message.payload['data'])
     end

@@ -10,6 +10,9 @@
     = form.label :user_id, style: "display: block"
     = form.select :user_id, @users.map{|c| [c.first_name, c.id]}
   p
+    = form.label :title, style: "display: block"
+    = form.text_field :title
+  p
     = form.label :description, style: "display: block"
     = form.text_area :description
   p

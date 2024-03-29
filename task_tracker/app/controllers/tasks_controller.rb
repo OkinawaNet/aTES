@@ -42,11 +42,11 @@ class TasksController < ApplicationController
   end
 
   def set_users
-    @users = User.all
+    @users = User.with_role(:popug)
   end
 
   def task_params
-    params.require(:task).permit(:user_id, :description)
+    params.require(:task).permit(:user_id, :title, :description)
   end
 
   def shuffle(tasks, users)

@@ -9,7 +9,7 @@ class TasksStreamingConsumer < ApplicationConsumer
   private
 
   def process_message(message)
-    case message.payload['event']
+    case message.payload['event_name']
     when 'task_created'
       on_task_created(message.payload['data'])
     when 'task_updated'

@@ -10,6 +10,9 @@ div id="#{dom_id task}" style="border:1px solid black;"
     =< task.user.first_name
     =< task.user.public_id
   p
+    strong Title:
+    =< task.title
+  p
     strong Description:
     =< task.description
   - if task.open?

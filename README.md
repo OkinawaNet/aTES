@@ -1,8 +1,12 @@
 # aTES
 
 ## Установка:
-1) Запустите приложение с помощью команды:
+1) Запустите команды:
 ```bash
+docker-compose build
+docker-compose run task-tracker rails db:migrate
+docker-compose run accounting rails db:migrate
+docker-compose run analytics rails db:migrate
 docker-compose up
 ```
 
@@ -26,3 +30,6 @@ docker-compose up
 ![Data Model](images/hw_1/DM.png)
 ### Сервисы
 ![Services](images/hw_1/Services.png)
+
+
+
